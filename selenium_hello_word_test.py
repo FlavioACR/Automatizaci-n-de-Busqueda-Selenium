@@ -1,4 +1,4 @@
-
+    
 # Modules & Librarys:
 from time import sleep
 import unittest
@@ -35,7 +35,8 @@ class HelloWordOne(unittest.TestCase):
 
     def test_hello_linkedin(self):
         '''
-        Loads a web page in the current browser sessio
+        Loads a web page in the current browser session
+        
         '''
         self.driver.get("https://www.linkedin.com/feed/")
         sleep(10)
