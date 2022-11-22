@@ -23,6 +23,7 @@ import csv
 
 class AutomationMELI(unittest.TestCase):
     '''
+    Class that inherits unittes and performs an automation test and search for elements within the MERCADOLIBRE site.
     '''
     
     def setUp(self):
@@ -49,48 +50,63 @@ class AutomationMELI(unittest.TestCase):
         WebDriverWait(self.driver, 10)
         driver = self.driver
         
-        # Para ir al sitio:
+        # We use the method .get () to go to the site:
         driver.get('http://mercadolibre.com')
-        # Maximize la ventana, de acuerdo 
-        # a los eleento responsivos que cambian de
-        # ubicación u orden dependiendo del tamaño de la vista.
+        
+        # Maximize the window, accordingly to responsive elements that change location or order depending on the size of the view:
         driver.maximize_window()
         driver.implicitly_wait(14)
 
     def test_search_and_automation(self):
+        '''
+        Test case with a series of automated steps to enter information to the site, perform a series of filters
+        identify elements within the site and save product information in a csv file.
+        '''
+        #e save the self.driver in a variable.
         driver = self.driver
-
-        # Primer flujo seleccionar País:
+        
+        # Found the Country by id name:
         country = driver.find_element(By.ID, 'MX')
+        # Click on it:
         country.click()
-        sleep(0)
+        sleep(1)
 
-        # Ubicarse en la Barra e ingresar el texto de busqueda:
+        # Go to the Bar and enter the search text finding it by its NAME:
         search_field = driver.find_element(By.NAME, 'as_word')
+        # Click on it:
         search_field.click()
-        search_field.clear()    
+        # Clear if that has information:
+        search_field.clear()
+        # Write in the search bar:
         search_field.send_keys('smartphones')
+        # Send the information:
         search_field.submit()
         sleep(0)
     
 
-        # Mayor Precio filtro:
+        # Identifies the Dropdown containing the highest or lowest priced item by its class name:
         order_menu = driver.find_element(By.CLASS_NAME, 'andes-dropdown__display-values')
+        # Click on it:
         order_menu.click()
         sleep(2)
+        
+        # Highest Price filter identifying it by its class name:
         price_sort = driver.find_element(By.XPATH, '/html/body/main/div/div[2]/section/div[1]/div/div/div/div[2]/div/div/div/div/div/ul/li[3]/div/div/span')  
+        # Click on it:
         price_sort.click()
         sleep(2)
 
-        # Productos:
+        # Empty dictionary where product information is stored:
         top_product = {}
-
+        
+        # Loop for to iterate through a range of 10 elements using the text and xpath of the elements, saving:
+        # the name of the product and the price of the product:
         for i in range(10):
             article_name = driver.find_element(By.XPATH, f'/html/body/main/div/div[2]/section/ol/li[{i + 1}]/div/div/div[2]/div[1]/a[1]/h2').text
             article_price = driver.find_element(By.XPATH, f'/html/body/main/div/div[2]/section/ol/li[{i + 1}]/div/div/div[2]/div[2]/div[1]/div[1]/div/div/div/span[1]/span[2]/span[2]').text
             top_product[article_name] = article_price
 
-
+        # Using the context manager we write a .csv file with the information in the top_product dictionary:
         with open('products_tops.csv', 'w') as f:
             writer = csv.writer(f)
             for k, v in top_product.items():
@@ -98,9 +114,13 @@ class AutomationMELI(unittest.TestCase):
 
 
     def tearDown(self):
-        # Cerrar todo el proceso.
+        '''
+        Function to close the driver or the tab
+        '''
         self.driver.quit()
     
 
+   
 if __name__ == "__main__":
+    # We ejecute the principal main and write the test report with testRunner:
     unittest.main(verbosity=2, testRunner=HTMLTestRunner(output="MELI_Testing_reports", report_name="MELI_search_automation"))
