@@ -1,19 +1,23 @@
-# lIBRERYS:
-
+# Modules & Librarys:
 # Unittest:
 import unittest
+
 # Pyunitreport:
 from pyunitreport import HTMLTestRunner
+
 # Selenium:
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+
 # Sleep from Time:
 from time import sleep
+
 # OS:
 import os
+
 # CSV
 import csv
 
@@ -26,17 +30,25 @@ class AutomationMELI(unittest.TestCase):
         This function prepare all the necessary to star with the Test Case.
         Parameters:
             chrome  	: import the modue  Service variable to call, save and use the path from the browser's driver.exe
-            self.driver : variable to save and use the browser's driver .exe to automated our Testing Case          
+            self.driver : variable to save and use the browser's driver .exe to automated our Testing Case
+        Variables:
+            options     :   Class for managing ChromeDriver specific options.
+            chrome      :   Service class that is responsible for the starting and stopping of chromedriver the parameter is the drive´s path.
+            self.driver :   We define the variable self.driver which will let us work with the driver.
+            driver      :   We save the self.driver in a variable.
         '''
         options = webdriver.ChromeOptions()
+        
+        # We use this method to Disabling Chrome Logging Messages:
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        
         chrome = Service(r"C:\Users\Flavio Carrola\Desktop\My learning\chromedriver_win32 106\chromedriver.exe")
         self.driver = webdriver.Chrome(service=chrome, options=options)
         
         # We say to the driver wait 10 seconds before to make other actions:
         WebDriverWait(self.driver, 10)
-
         driver = self.driver
+        
         # Para ir al sitio:
         driver.get('http://mercadolibre.com')
         # Maximize la ventana, de acuerdo 
